@@ -6,6 +6,7 @@ public class Sword : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.GetComponent<Enemy>().hp -= 20;
+        if (collision.CompareTag("Enemy"))
+            collision.GetComponent<Enemy>().hp -= 20;
     }
 }
