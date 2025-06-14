@@ -670,7 +670,7 @@ GameObject:
   - component: {fileID: 856219745}
   - component: {fileID: 856219744}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: ScrollBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -725,7 +725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1012912369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,6 +844,7 @@ MonoBehaviour:
   player: {fileID: 1448062732}
   hp: 100
   animator: {fileID: 196739960}
+  dashSpeed: 10
   groundCrack: {fileID: 5706071549024512993, guid: 468039800b7b80243a216c7454878e70, type: 3}
   daoguang: {fileID: 1406978725809504786, guid: 70c6bf9710517ca42968ecece1da9151, type: 3}
 --- !u!4 &1089991915

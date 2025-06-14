@@ -32,9 +32,9 @@ public class Enemy : MonoBehaviour
         {
             stopMoving = true;
             enemyMoveTimer = 4f;
-            //StartCoroutine(Skill3());
+            StartCoroutine(Skill3());
             //StartCoroutine(SkillTwo());
-            StartCoroutine(SkillOne());
+            //StartCoroutine(SkillOne());
         }
         EnemyMove();
     }
