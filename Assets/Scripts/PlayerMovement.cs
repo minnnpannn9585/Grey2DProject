@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCD;
     public Animator anim;
     bool isDashing = false;
+    public GameObject dashTrailPrefab;
 
     void Update()
     {
@@ -47,10 +48,12 @@ public class PlayerMovement : MonoBehaviour
         if (horizontal == 0 && vertical == 0)
         {
             anim.SetBool("isMoving", false);
+            GetComponent<AudioSource>().Stop();
         }
         if (horizontal != 0 || vertical != 0)
         {
             anim.SetBool("isMoving", true);
+            
         }
         Vector3 direction = new Vector3(horizontal, vertical, 0).normalized;
         transform.Translate(direction * Time.deltaTime * speed);
@@ -61,10 +64,28 @@ public class PlayerMovement : MonoBehaviour
         while (Vector3.Distance(transform.position, dashTarget) > 0.1f)
         {
             isDashing = true;
+
+            CreateDashTrail();
+
             //transform.position = Vector3.Lerp(transform.position, dashTarget, dashSpeed);
             transform.position = Vector3.MoveTowards(transform.position, dashTarget, dashSpeed);
             yield return null;
         }
         isDashing = false;
     }
+
+    void CreateDashTrail()
+    {
+        // 实例化幻影
+        GameObject trail = Instantiate(dashTrailPrefab, transform.position, transform.rotation);
+
+        // 设置幻影的缩放和方向
+        trail.transform.localScale = transform.GetChild(0).localScale;
+
+        // 销毁幻影，避免占用内存
+        Destroy(trail, 0.5f); // 幻影持续时间
+    }
+
+    
+
 }

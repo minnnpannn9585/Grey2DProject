@@ -18,6 +18,9 @@ public class Enemy : MonoBehaviour
     bool stopMoving = false;
     Vector2 targetPosition;
     float enemyMoveTimer = 2f;
+    public AudioClip skillThreeSFX;
+    public AudioClip skillTwoSFX;
+    public AudioClip skillOneSFX;
 
     void Update()
     {
@@ -32,7 +35,22 @@ public class Enemy : MonoBehaviour
         {
             stopMoving = true;
             enemyMoveTimer = 4f;
-            StartCoroutine(Skill3());
+            int randomNumber = Random.Range(0, 3); // Randomly choose a skill to use
+            if(randomNumber == 0)
+            {
+                StartCoroutine(SkillOne());
+                SFXManager.Instance.PlaySFX(skillOneSFX);
+            }
+            else if(randomNumber == 1) {
+                StartCoroutine(SkillTwo());
+                SFXManager.Instance.PlaySFX(skillTwoSFX);
+            }
+            else if (randomNumber == 2)
+            {
+                StartCoroutine(Skill3());
+                SFXManager.Instance.PlaySFX(skillThreeSFX);
+            }
+            
             //StartCoroutine(SkillTwo());
             //StartCoroutine(SkillOne());
         }
