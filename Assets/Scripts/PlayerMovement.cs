@@ -39,11 +39,11 @@ public class PlayerMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         if (horizontal > 0)
         {
-            transform.GetChild(0).localScale = Vector3.one * 0.4f;
+            transform.GetChild(0).localScale = Vector3.one * 0.15f;
         }
         else if (horizontal < 0)
         {
-            transform.GetChild(0).localScale = new Vector3(-1, 1, 1) * 0.4f;
+            transform.GetChild(0).localScale = new Vector3(-1, 1, 1) * 0.15f;
         }
         if (horizontal == 0 && vertical == 0)
         {
