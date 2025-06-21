@@ -1,11 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    public Image healthBar;
+    public Image healthBar01;
+    public Image healthBar02;
     public float speed;
     public Transform player;
     public int hp;
@@ -21,10 +22,12 @@ public class Enemy : MonoBehaviour
     public AudioClip skillThreeSFX;
     public AudioClip skillTwoSFX;
     public AudioClip skillOneSFX;
-
+    private bool isBlinking = false; // 用于标记是否正在执行 BlinkRed 协程
     void Update()
     {
-        healthBar.fillAmount = hp / 100f;
+        healthBar01.fillAmount = (hp - 50) / 50f;
+        if (hp < 50)
+            healthBar02.fillAmount = hp / 50f;
         if (hp <= 0)
         {
             Destroy(this.gameObject);
@@ -36,12 +39,12 @@ public class Enemy : MonoBehaviour
             stopMoving = true;
             enemyMoveTimer = 4f;
             int randomNumber = Random.Range(0, 3); // Randomly choose a skill to use
-            if(randomNumber == 0)
+            if (randomNumber == 0)
             {
                 StartCoroutine(SkillOne());
                 SFXManager.Instance.PlaySFX(skillOneSFX);
             }
-            else if(randomNumber == 1) {
+            else if (randomNumber == 1) {
                 StartCoroutine(SkillTwo());
                 SFXManager.Instance.PlaySFX(skillTwoSFX);
             }
@@ -50,7 +53,7 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(Skill3());
                 SFXManager.Instance.PlaySFX(skillThreeSFX);
             }
-            
+
             //StartCoroutine(SkillTwo());
             //StartCoroutine(SkillOne());
         }
@@ -65,11 +68,11 @@ public class Enemy : MonoBehaviour
 
         if (dashTarget.x > transform.position.x)
         {
-            transform.GetChild(0).localScale = new Vector3(-1, 1, 1) * 0.45f;
+            transform.GetChild(0).localScale = new Vector3(-1, 1, 1) * 0.19f;
         }
         else if (dashTarget.x < transform.position.x)
         {
-            transform.GetChild(0).localScale = new Vector3(1, 1, 1) * 0.45f;
+            transform.GetChild(0).localScale = new Vector3(1, 1, 1) * 0.19f;
         }
 
         while (Vector2.Distance(transform.position, dashTarget) > 0.1f)
@@ -79,7 +82,7 @@ public class Enemy : MonoBehaviour
             yield return null;
         }
 
-        
+
 
         animator.SetBool("skillOne", false);
         yield return new WaitForSeconds(0.5f); // Optional delay after dashing
@@ -96,11 +99,11 @@ public class Enemy : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
         {
-            Instantiate(groundCrack, transform.position + new Vector3(0,-1f,0), Quaternion.identity);
+            Instantiate(groundCrack, transform.position + new Vector3(0, -1f, 0), Quaternion.identity);
             yield return new WaitForSeconds(0.5f);
         }
 
-        
+
 
         stopMoving = false;
         movingToTarget = false;
@@ -111,39 +114,79 @@ public class Enemy : MonoBehaviour
 
         animator.SetTrigger("skillThree");
 
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
             Instantiate(daoguang, transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.3f);
         }
-        
+
         yield return new WaitForSeconds(0.5f);
 
         stopMoving = false;
-        
+
         movingToTarget = false;
     }
 
     public void EnemyMove()
     {
-        
+
         if (!movingToTarget && !stopMoving)
         {
             targetPosition = new Vector2(player.position.x, player.position.y);
-            if(player.position.x > transform.position.x)
+            if (player.position.x > transform.position.x)
             {
-                transform.GetChild(0).localScale = new Vector3(-1,1,1) * 0.45f;
+                transform.GetChild(0).localScale = new Vector3(-1, 1, 1) * 0.19f;
             }
             else if (player.position.x < transform.position.x)
             {
-                transform.GetChild(0).localScale = new Vector3(1, 1, 1) * 0.45f;
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1) * 0.19f;
             }
             movingToTarget = true;
         }
-        else if(movingToTarget && !stopMoving)
+        else if (movingToTarget && !stopMoving)
         {
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         }
+    }
+
+    public void EnemyGetHit()
+    {
+        if (!isBlinking) // 如果没有正在执行的协程，才启动新的协程
+        {
+            StartCoroutine(BlinkRed());
+        }
+    }
+
+    private IEnumerator BlinkRed()
+    {
+        isBlinking = true; // 标记协程正在运行
+        // Get the SpriteRenderer component of the enemy
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (spriteRenderer != null)
+        {
+            // Save the original color
+            Color originalColor = spriteRenderer.color;
+
+            // Change the color to red
+            spriteRenderer.color = Color.red;
+
+            // Wait for a short duration
+            yield return new WaitForSeconds(0.1f);
+
+            // Revert the color back to the original
+            spriteRenderer.color = originalColor;
+
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.red;
+
+            // Wait for a short duration
+            yield return new WaitForSeconds(0.1f);
+
+            // Revert the color back to the original
+            spriteRenderer.color = originalColor;
+        }
+        isBlinking = false; // 协程结束，标记为未运行
     }
 
 }
