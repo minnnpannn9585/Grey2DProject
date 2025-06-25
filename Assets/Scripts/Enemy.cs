@@ -23,11 +23,26 @@ public class Enemy : MonoBehaviour
     public AudioClip skillTwoSFX;
     public AudioClip skillOneSFX;
     private bool isBlinking = false; // 用于标记是否正在执行 BlinkRed 协程
+
+    private bool stateOne = true;
+    int index = 0;
+    
     void Update()
     {
         healthBar01.fillAmount = (hp - 50) / 50f;
         if (hp < 50)
+        {
+            if (stateOne)
+            {
+                //change state, such as bg picture, music, etc
+            }
+            stateOne = false;
             healthBar02.fillAmount = hp / 50f;
+            
+        }
+        
+            
+            
         if (hp <= 0)
         {
             Destroy(this.gameObject);
@@ -38,24 +53,43 @@ public class Enemy : MonoBehaviour
         {
             stopMoving = true;
             enemyMoveTimer = 4f;
-            int randomNumber = Random.Range(0, 3); // Randomly choose a skill to use
-            if (randomNumber == 0)
+            if (stateOne)
             {
-                StartCoroutine(SkillOne());
-                SFXManager.Instance.PlaySFX(skillOneSFX);
+                int randomNumber = Random.Range(0, 2); // Randomly choose a skill to use
+                if (randomNumber == 0)
+                {
+                    StartCoroutine(SkillOne());
+                    SFXManager.Instance.PlaySFX(skillOneSFX);
+                }
+                else if (randomNumber == 1) {
+                    StartCoroutine(Skill3());
+                    SFXManager.Instance.PlaySFX(skillThreeSFX);
+                }
             }
-            else if (randomNumber == 1) {
-                StartCoroutine(SkillTwo());
-                SFXManager.Instance.PlaySFX(skillTwoSFX);
-            }
-            else if (randomNumber == 2)
+            else
             {
-                StartCoroutine(Skill3());
-                SFXManager.Instance.PlaySFX(skillThreeSFX);
+                
+                
+                    if (index == 0)
+                    {
+                        StartCoroutine(SkillOne());
+                        SFXManager.Instance.PlaySFX(skillOneSFX);
+                        index++;
+                    }
+                    else if (index == 1)
+                    {
+                        StartCoroutine(SkillTwo());
+                        SFXManager.Instance.PlaySFX(skillTwoSFX);
+                        index++;
+                    }
+                    else if (index == 2)
+                    {
+                        StartCoroutine(Skill3());
+                        SFXManager.Instance.PlaySFX(skillThreeSFX);
+                        index = 0;
+                    }
+                
             }
-
-            //StartCoroutine(SkillTwo());
-            //StartCoroutine(SkillOne());
         }
         EnemyMove();
     }
