@@ -29,6 +29,11 @@ public class Enemy : MonoBehaviour
     
     void Update()
     {
+        if(GameManager.instance.isStarted == false)
+        {
+            return;
+        }
+
         healthBar01.fillAmount = (hp - 50) / 50f;
         if (hp < 50)
         {

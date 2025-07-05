@@ -14,6 +14,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if(GameManager.instance.isStarted == false)
+        {
+            return;
+        }
+
         dashCD -=Time.deltaTime;
 
         if (!isDashing)
