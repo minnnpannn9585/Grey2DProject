@@ -4651,6 +4651,10 @@ MonoBehaviour:
   - {fileID: 146182525}
   - {fileID: 1785572372}
   enemyAnim: {fileID: 196739960}
+  oldfront: {fileID: 1667009031}
+  oldback: {fileID: 1175937909}
+  newfront: {fileID: 2020733594}
+  newback: {fileID: 896421017}
 --- !u!1 &2020733594
 GameObject:
   m_ObjectHideFlags: 0

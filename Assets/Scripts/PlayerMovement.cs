@@ -62,6 +62,9 @@ public class PlayerMovement : MonoBehaviour
         }
         Vector3 direction = new Vector3(horizontal, vertical, 0).normalized;
         transform.Translate(direction * Time.deltaTime * speed);
+        
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x,-9f,9f),
+            Mathf.Clamp(transform.position.y,-5f,1f), 0f);
     }
 
     IEnumerator Dash(Vector3 dashTarget)

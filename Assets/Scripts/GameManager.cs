@@ -26,6 +26,11 @@ public class GameManager : MonoBehaviour
     int index = 0;
     public Animator enemyAnim;
 
+    public GameObject oldfront;
+    public GameObject oldback;
+    public GameObject newfront;
+    public GameObject newback;
+
     void Start()
     {
         dialogues[index].SetActive(true);
@@ -54,5 +59,13 @@ public class GameManager : MonoBehaviour
                 enemyAnim.SetTrigger("start");
             }
         }
+    }
+
+    public void ChangeBGHalftime()
+    {
+        oldfront.SetActive(false);
+        oldback.SetActive(false);
+        newfront.SetActive(true);
+        newback.SetActive(true);
     }
 }

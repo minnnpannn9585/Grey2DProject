@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
         {
             if (stateOne)
             {
+                GameManager.instance.ChangeBGHalftime();
                 //change state, such as bg picture, music, etc
             }
             stateOne = false;
@@ -186,6 +187,9 @@ public class Enemy : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         }
+        
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x,-9f,9f),
+            Mathf.Clamp(transform.position.y,-5f,1f), 0f);
     }
 
     public void EnemyGetHit()
