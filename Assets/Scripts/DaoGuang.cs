@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,5 +23,13 @@ public class DaoGuang : MonoBehaviour
     {
         Vector2 dir = initialPlayerPosition - initialPosition;
         transform.position += new Vector3(dir.normalized.x * speed * Time.deltaTime, dir.normalized.y * speed * Time.deltaTime,0);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.GetComponent<PlayerHealth>().DecreaseHealth();
+        }
     }
 }
